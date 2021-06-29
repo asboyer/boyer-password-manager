@@ -6,11 +6,16 @@ import json, os, getpass
 
 # from boyer import clear
 
+def clear():
+    os.system('clear')
+
+clear()
+
 class terminate(Exception): pass
 errors = 0
 
-if os.path.exists("storage/passwords.json"):
-    with open("storage/passwords.json", "r") as file:
+if os.path.exists("storage/.passwords.json"):
+    with open("storage/.passwords.json", "r") as file:
         passwords = json.load(file)
 else:
     passwords = {}
@@ -19,36 +24,37 @@ need_pass = False
 quit = False
 
 if os.path.exists("storage/.config.json"):
-	with open("storage/.config.json", "r") as file:
-		credentials  = json.load(file)
-	if credentials == {}:
-		need_pass = True
-	else:
+    with open("storage/.config.json", "r") as file:
+        credentials  = json.load(file)
+    if credentials == {}:
+        pass
+    else:
         while True:
-		entered_username = getpass.getpass("Username: ")
-		if entered_username == credentials["username"]:
-			pass
-		else:
-			print("Wrong username!")
-		
-		if not quit:
-			entered_password = getpass.getpass("Password: ")
-			if entered_password == credentials["password"]:
-				print(f"Welcome {credentials["username"]}")
-			else:
-				print("Incorrect username!")
-		
-else or need_pass:
-	credentials = {}
-	print("Welcome to Boyer's password generator!\nLet's get you started with some credentials")
-	credentials["username"] = input("Create a username: ")
-	while True:
-		user_pass = getpass.getpass("Create a password: ")
-		if user_pass == getpass.getpass("Confirm password: "):
-			print("Password confirmed!")
-			credentials["password"] = user_pass
-		else:
-			print("Passwords do not match!")
+            entered_username = getpass.getpass("Username: ")
+            if entered_username == credentials["username"]:
+                pass
+            else:
+                print("Wrong username!")
+            
+            if not quit:
+                entered_password = getpass.getpass("Password: ")
+                if entered_password == credentials["password"]:
+                    print(f"Welcome {credentials['username']}")
+                else:
+                    print("Incorrect username!")
+        
+else:
+    credentials = {}
+    print("Welcome to Boyer's password generator!\nLet's get you started with some credentials")
+    credentials["username"] = input("Create a username: ")
+    while True:
+        user_pass = getpass.getpass("Create a password: ")
+        if user_pass == getpass.getpass("Confirm password: "):
+            print("Password confirmed!")
+            credentials["password"] = user_pass
+            break
+        else:
+            print("Passwords do not match!")
 
 commands = """
 "quit": to quit the program
@@ -57,9 +63,6 @@ commands = """
 "new": to create a new password
 "save": to save your passwords to file
 """
-
-def clear():
-    os.system('clear')
 
 def user_cmd(cmd):
     local_errors = 0
@@ -98,10 +101,10 @@ def user_cmd(cmd):
 
 
 def save():
-    with open("storage/passwords.json", "w") as file:
+    with open("storage/.passwords.json", "w") as file:
         json.dump(passwords, file, indent=4)
-	with open("storage/.config.json", "w") as file:
-		json.dump(credentials, file, indent=4)
+    with open("storage/.config.json", "w") as file:
+        json.dump(credentials, file, indent=4)
 
 def quit():
     save()
@@ -160,14 +163,14 @@ def start():
     clear()
     # print(text2art("Boyer's\nPassword\nManager!"))
     print("welcome to boyer's password manager!".upper())
-   	input("\nPress enter to start")
+    input("\nPress enter to start")
     clear()
 
 start()
 
 while True:
     try:
-        cmd = input(f"{getpass.getuser()}$ ")
+        cmd = input(f"{credentials['username']}$ ")
         errors = user_cmd(cmd)
     except terminate:
         break
