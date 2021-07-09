@@ -121,22 +121,29 @@ def clean(text):
     return text.lower().strip()
 
 def get_pass():
+    quit = False
     while True:
-        password = input("Which password? ")
-        if password == "show":
+        password = input("Which password? ").strip()
+        if password == "":
             print("\nAll your passwords:")
             for key in passwords.keys():
                 print(f"~ {key}")
             print("")
-        else:
+        elif password in passwords.keys():
             break
-    print(passwords[password])
-    print("\n")
+        elif password == "QUIT":
+            quit = True
+            break
+        else:
+            print("Not a password. Press enter to list all of your passwords.")
+    if not quit:
+        print(passwords[password])
+        print()
 
 def new():
     while True:
         
-        name = input("Password name: ")
+        name = input("Password name: ").strip()
 
         if name == '':
             print(passwords.keys())
@@ -151,13 +158,13 @@ def new():
 
     passwords[name] = {}
 
-    username = input(f"Username for {name}: ")
+    username = input(f"Username for {name}: ").strip()
     passwords[name]["username"] = username
 
-    password = input(f"Password for {name}: ")
+    password = input(f"Password for {name}: ").strip()
     passwords[name]["password"] = password
 
-    url = input(f"URL for {name}: ")
+    url = input(f"URL for {name}: ").strip()
     passwords[name]["URL"] = url
 
     save()
@@ -204,3 +211,6 @@ while True:
         errors = user_cmd(cmd)
     except terminate:
         break
+
+# Written by Andrew Boyer
+# https://asboyer.com
