@@ -95,6 +95,8 @@ def user_cmd(cmd):
         get_pass()
     elif cmd == 'wipe':
         wipe()
+    elif cmd == 'edit':
+
     else:
         print('not a command')
         local_errors = errors + 1
@@ -112,6 +114,18 @@ def save():
 def quit():
     save()
     raise terminate
+
+def edit():
+    quit = False
+    while True:
+        password = input("Which password would you like to edit? ")
+        if password in passwords.keys():
+            pass
+        elif password == 'QUIT':
+            quit = True
+            break
+        else:
+            print()
 
 def man():
     print("Welcome to Andrew Boyer's password manager!\nHere are all available commands:\n")
