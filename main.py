@@ -179,6 +179,11 @@ def edit():
         password = input("Which password would you like to edit? ")
         if password in passwords.keys():
             break
+        elif password.strip() == "":
+            print("\nAll your passwords:")
+            for key in passwords.keys():
+                print(f"~ {key}")
+                print("")
         elif password == 'QUIT':
             return 0
         else:
