@@ -198,11 +198,18 @@ def wipe():
         if answer.startswith("y"):
             break
         elif answer.startswith("n"):
-            wipe = False
-            break
+            return 0
         else:
             print("Enter a y or n")
             continue
+    entered_password = getpass.getpass("Please confirm your password: ")
+    passwords, credentials = read_data()
+    if entered_password == credentials["password"]:
+        pass
+    else:
+        print("Incorrect password... terminating program!\n\n[this incident will be reported]")
+        wipe = False
+        quit()
     if wipe:
         passwords = {}
         credentials = {}
