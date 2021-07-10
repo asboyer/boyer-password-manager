@@ -6,3 +6,4 @@
 - organize code into more organized functions
 - read all commands from a database
 - track all user data locally
+- implement 'clean function'
