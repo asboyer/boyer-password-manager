@@ -2,7 +2,7 @@
 - ask for password before wiping
 - update manual
 - encrypt passwords using ceasar cipher
-
+- change terminal colors
 - organize code into more organized functions
 - read all commands from a database
 - track all user data locally
