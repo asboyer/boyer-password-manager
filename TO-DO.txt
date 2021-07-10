@@ -14,3 +14,5 @@
 
 - up arrow for previous commands
 - tab for autocompletion
+
+- add option to delete password
