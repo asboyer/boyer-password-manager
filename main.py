@@ -96,7 +96,7 @@ def user_cmd(cmd):
     elif cmd == 'wipe':
         wipe()
     elif cmd == 'edit':
-
+        edit()
     else:
         print('not a command')
         local_errors = errors + 1
@@ -114,18 +114,6 @@ def save():
 def quit():
     save()
     raise terminate
-
-def edit():
-    quit = False
-    while True:
-        password = input("Which password would you like to edit? ")
-        if password in passwords.keys():
-            pass
-        elif password == 'QUIT':
-            quit = True
-            break
-        else:
-            print()
 
 def man():
     print("Welcome to Andrew Boyer's password manager!\nHere are all available commands:\n")
@@ -155,6 +143,9 @@ def get_pass():
         print()
 
 def new():
+
+    quit = False
+
     while True:
         
         name = input("Password name: ").strip()
@@ -163,25 +154,44 @@ def new():
             print(passwords.keys())
             print("Please enter a valid password name!") 
         
+        elif password = "QUIT":
+            quit = True
+            break
+
         elif name in passwords.keys():
             print("Please enter a unique password name!")
         
         else:
             break   
 
+    if not quit:
+        passwords[name] = {}
 
-    passwords[name] = {}
+        username = input(f"Username for {name}: ").strip()
+        passwords[name]["username"] = username
 
-    username = input(f"Username for {name}: ").strip()
-    passwords[name]["username"] = username
+        password = input(f"Password for {name}: ").strip()
+        passwords[name]["password"] = password
 
-    password = input(f"Password for {name}: ").strip()
-    passwords[name]["password"] = password
-
-    url = input(f"URL for {name}: ").strip()
-    passwords[name]["URL"] = url
+        url = input(f"URL for {name}: ").strip()
+        passwords[name]["URL"] = url
 
     save()
+
+def edit():
+
+    quit = False
+
+    while True:
+        password = input("Which password would you like to edit? ")
+        if password in passwords.keys():
+            pass
+        elif password == 'QUIT':
+            quit = True
+            break
+        else:
+            print()
+
 
 def start():
     clear()
