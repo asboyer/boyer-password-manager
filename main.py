@@ -174,7 +174,6 @@ def new():
     save()
 
 def edit():
-
     while True:
         password = input("Which password would you like to edit? ")
         if password in passwords.keys():
@@ -193,6 +192,12 @@ def edit():
         item = input('What item would you like to edit? ')
         if item in items:
             break
+        elif item == 'name':
+            print(f'Previous name: {password}')
+            passwords[input(f'New name for {password}: ')] = passwords[password]
+            del passwords[password]
+            save()
+            return 0
         else:
             print('Not a valid field!')
             continue
