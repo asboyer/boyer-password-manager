@@ -4,6 +4,10 @@
 - encrypt passwords using ceasar cipher
 - change terminal colors
 - organize code into more organized functions
-- read all commands from a database
-- track all user data locally
 - implement 'clean function'
+
+- read all commands from a database
+
+- track all user data locally
+- track security incidents
+- track command history
