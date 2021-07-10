@@ -178,11 +178,23 @@ def edit():
     while True:
         password = input("Which password would you like to edit? ")
         if password in passwords.keys():
-            pass
+            break
         elif password == 'QUIT':
             return 0
         else:
-            print(f"You don't have a password name {password.strip()}!")
+            print(f"You don't have a password named {password.strip()}!")
+            continue
+    while True: 
+        item = input('What item would you like to edit? ')
+        if item in items:
+            break
+        else:
+            print('Not a valid field!')
+            continue
+    print(f'Previous {item} for {password}: {passwords[password][item]}')
+    passwords[password][item] = input(f'New {item} for {password}: ')
+    save()
+
 
 
 def start():

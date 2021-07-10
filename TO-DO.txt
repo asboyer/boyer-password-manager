@@ -11,3 +11,6 @@
 - track all user data locally
 - track security incidents
 - track command history
+
+- up arrow for previous commands
+- tab for autocompletion
