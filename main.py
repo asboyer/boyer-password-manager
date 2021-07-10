@@ -6,6 +6,8 @@ from art import text2art
 
 from boyer import clear
 
+items = ["username", "password", "URL"]
+
 clear()
 
 class terminate(Exception): pass
@@ -158,14 +160,14 @@ def new():
         else:
             break   
 
-    items = ["username", "password", "URL"]
-
     passwords[name] = {}
 
     for item in items:
         user_input = input(f"{item[0].upper() + item[1:]} for {name}: ").strip()
         if user_input == "QUIT":
             return 0
+        elif user_input.strip() == "" and item == "URL":
+            passwords[name][item] = f'https://{name.lower().strip()}.com'
         else:
             passwords[name][item] = user_input
 
