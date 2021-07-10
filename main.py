@@ -116,14 +116,13 @@ def quit():
     raise terminate
 
 def man():
-    print("Welcome to Andrew Boyer's password manager!\nHere are all available commands:\n")
+    print("Welcome to Andrew Boyer's password manager!\nHere are all available commands:")
     print(commands)
 
 def clean(text):
     return text.lower().strip()
 
 def get_pass():
-    quit = False
     while True:
         password = input("Which password? ").strip()
         if password == "":
@@ -134,17 +133,13 @@ def get_pass():
         elif password in passwords.keys():
             break
         elif password == "QUIT":
-            quit = True
-            break
+            return 0
         else:
             print("Not a password. Press enter to list all of your passwords.")
-    if not quit:
-        print(passwords[password])
-        print()
+    print(passwords[password])
+    print()
 
 def new():
-
-    quit = False
 
     while True:
         
@@ -154,9 +149,8 @@ def new():
             print(passwords.keys())
             print("Please enter a valid password name!") 
         
-        elif password = "QUIT":
-            quit = True
-            break
+        elif name == "QUIT":
+            return 0
 
         elif name in passwords.keys():
             print("Please enter a unique password name!")
@@ -164,33 +158,29 @@ def new():
         else:
             break   
 
-    if not quit:
-        passwords[name] = {}
+    items = ["username", "password", "URL"]
 
-        username = input(f"Username for {name}: ").strip()
-        passwords[name]["username"] = username
+    passwords[name] = {}
 
-        password = input(f"Password for {name}: ").strip()
-        passwords[name]["password"] = password
-
-        url = input(f"URL for {name}: ").strip()
-        passwords[name]["URL"] = url
+    for item in items:
+        user_input = input(f"{item[0].upper() + item[1:]} for {name}: ").strip()
+        if user_input == "QUIT":
+            return 0
+        else:
+            passwords[name][item] = user_input
 
     save()
 
 def edit():
-
-    quit = False
 
     while True:
         password = input("Which password would you like to edit? ")
         if password in passwords.keys():
             pass
         elif password == 'QUIT':
-            quit = True
-            break
+            return 0
         else:
-            print()
+            print(f"You don't have a password name {password.strip()}!")
 
 
 def start():
