@@ -69,6 +69,12 @@ if os.path.exists("storage/.passwords.json"):
 else:
     passwords = {}
 
+if os.path.exists('storage/.data.json'):
+    with open('storage/.data.json', 'r') as file:
+        data = json.load(file)
+else:
+    data = {}
+
 username = credentials['username']
 
 commands = """
@@ -117,6 +123,8 @@ def save():
         json.dump(passwords, file, indent=4)
     with open("storage/.config.json", "w") as file:
         json.dump(credentials, file, indent=4)
+    with open('storage/.data.json', 'w') as file:
+        json.dump(data, file, indent=4)
 
 def quit():
     save()
