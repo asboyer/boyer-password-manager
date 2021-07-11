@@ -77,6 +77,9 @@ commands = """
 "clear": to clear the terminal window
 "new": to create a new password
 "save": to save your passwords to file
+"wipe": to delete all data stored in the password manager
+"edit": edit a password
+"get": display a password
 """
 
 def user_cmd(cmd):
@@ -99,6 +102,8 @@ def user_cmd(cmd):
         wipe()
     elif cmd == 'edit':
         edit()
+    elif cmd == "":
+        list()
     else:
         print('not a command')
         local_errors = errors + 1
@@ -117,8 +122,14 @@ def quit():
     save()
     raise terminate
 
+def list():
+    print("\nAll your passwords:")
+    for key in passwords.keys():
+        print(f"~ {key}")
+    print("")
+
 def man():
-    print("Welcome to Andrew Boyer's password manager!\nHere are all available commands:")
+    # print("Welcome to Andrew Boyer's password manager!\nHere are all available commands:")
     print(commands)
 
 def clean(text):
@@ -204,8 +215,6 @@ def edit():
     print(f'Previous {item} for {password}: {passwords[password][item]}')
     passwords[password][item] = input(f'New {item} for {password}: ')
     save()
-
-
 
 def start():
     clear()
