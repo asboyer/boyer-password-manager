@@ -7,6 +7,32 @@ from art import text2art
 from boyer import clear
 
 items = ["username", "password", "URL"]
+lock = False
+wiped = False
+
+if os.path.exists('storage/.data.json'):
+    with open('storage/.data.json', 'r') as file:
+        data = json.load(file)
+else:
+    data = {
+        "passwords": 0,
+        "unlocks": 0,
+        "commands": 0,
+        "security-incidents": 0
+    }
+if data == {}:
+    data = {
+        "passwords": 0,
+        "unlocks": 0,
+        "commands": 0,
+        "security-incidents": 0
+    }    
+
+def save_data(data):
+    with open('storage/.data.json', 'w') as file:
+        json.dump(data, file, indent=4)
+
+save_data(data)
 
 clear()
 
@@ -33,17 +59,27 @@ if os.path.exists("storage/.config.json"):
         while True:
             entered_username = input("Username: ")
             if entered_username == credentials["username"]:
-                pass
+                break
             else:
                 print("Wrong username!")
                 continue
-            
+        incorrect = 0
+        while True:
             entered_password = getpass.getpass("Password: ")
             if entered_password == credentials["password"]:
-                print(f"Welcome {credentials['username']}")
+                data['unlocks'] += 1
+                save_data(data)
                 break
             else:
                 print("Incorrect password!")
+                incorrect += 1
+                if incorrect == 5:
+                    print("Too many incorrect passwords!")
+                    lock = True
+                    data["security-incidents"] += 1
+                    save_data(data)
+                    break
+                continue
     
 else:
     credentials = {}
@@ -53,6 +89,8 @@ else:
         user_pass = getpass.getpass("Create a password: ")
         if user_pass == getpass.getpass("Confirm password: "):
             print("Password confirmed!")
+            data['unlocks'] += 1
+            save_data(data)
             credentials["password"] = user_pass
             with open("storage/.config.json", "w") as file:
                 json.dump(credentials, file, indent=4)
@@ -68,12 +106,8 @@ if os.path.exists("storage/.passwords.json"):
         passwords = json.load(file)
 else:
     passwords = {}
-
-if os.path.exists('storage/.data.json'):
-    with open('storage/.data.json', 'r') as file:
-        data = json.load(file)
-else:
-    data = {}
+    with open('storage/.passwords.json', 'w') as file:
+        json.dump(passwords, file, indent=4)
 
 username = credentials['username']
 
@@ -115,6 +149,9 @@ def user_cmd(cmd):
         local_errors = errors + 1
         if local_errors == 3 or local_errors == 5 or local_errors > 10:
             print("use 'man' to display help message")
+    if cmd != "quit" or local_errors != 0:
+        data['commands'] += 1
+        save_data(data)
     return local_errors
 
 
@@ -167,7 +204,6 @@ def new():
         name = input("Password name: ").strip()
 
         if name == '':
-            print(passwords.keys())
             print("Please enter a valid password name!") 
         
         elif name == "QUIT":
@@ -242,34 +278,55 @@ def wipe():
             print("Enter a y or n")
             continue
     entered_password = getpass.getpass("Please confirm your password: ")
-    passwords, credentials = read_data()
+    passwords, credentials, data = read_data()
     if entered_password == credentials["password"]:
+        print("Wiping all data...")
         pass
     else:
         print("Incorrect password... terminating program!\n\n[this incident will be reported]")
         wipe = False
-        quit()
+        data["security-incidents"] += 1
+        save_data(data)
     if wipe:
         passwords = {}
         credentials = {}
+        data = {
+            "passwords": 0,
+            "unlocks": 0,
+            "commands": 0,
+            "security-incidents": 0
+        }
         with open("storage/.passwords.json", "w") as file:
             json.dump(passwords, file, indent=4)
         with open("storage/.config.json", "w") as file:
             json.dump(credentials, file, indent=4)
+        with open("storage/.data.json", "w") as file:
+            json.dump(data, file, indent=4)
+        print("All data wiped!")
 
 def read_data():
     with open("storage/.config.json", "r") as file:
         credentials  = json.load(file)
     with open("storage/.passwords.json", "r") as file:
         passwords = json.load(file)
-    return passwords, credentials
+    with open("storage/.data.json", "r") as file:
+        data = json.load(file)
+    return passwords, credentials, data
 
-start()
+if data["unlocks"] < 1:
+    start()
+elif not lock:
+    clear()
 
-while True:
+while not lock:
     try:
+        data["passwords"] = 0
+        for password in passwords:
+            data["passwords"] += 1
+            save_data(data)
         cmd = input(f"{username}$ ")
-        passwords, credentials = read_data()
+        passwords, credentials, data = read_data()
+        # print(data)          
         errors = user_cmd(cmd)
     except terminate:
         break
