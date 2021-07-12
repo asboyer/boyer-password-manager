@@ -6,6 +6,8 @@ from art import text2art
 
 from boyer import clear
 
+import time
+
 items = ["username", "password", "URL"]
 lock = False
 wiped = False
@@ -89,8 +91,6 @@ else:
         user_pass = getpass.getpass("Create a password: ")
         if user_pass == getpass.getpass("Confirm password: "):
             print("Password confirmed!")
-            data['unlocks'] += 1
-            save_data(data)
             credentials["password"] = user_pass
             with open("storage/.config.json", "w") as file:
                 json.dump(credentials, file, indent=4)
@@ -126,6 +126,9 @@ def user_cmd(cmd):
     local_errors = 0
     cmd_raw = cmd
     cmd = clean(cmd)
+    if cmd in ['man', 'help', 'cls', 'clear', 'new', 'save', 'get', 'wipe', 'edit', '']:
+        data['commands'] += 1
+        save_data(data)
     if cmd == "quit":
         quit()
     elif cmd == 'man' or cmd == 'help':
@@ -149,9 +152,7 @@ def user_cmd(cmd):
         local_errors = errors + 1
         if local_errors == 3 or local_errors == 5 or local_errors > 10:
             print("use 'man' to display help message")
-    if cmd != "quit" or local_errors != 0:
-        data['commands'] += 1
-        save_data(data)
+
     return local_errors
 
 
@@ -286,7 +287,9 @@ def wipe():
         print("Incorrect password... terminating program!\n\n[this incident will be reported]")
         wipe = False
         data["security-incidents"] += 1
-        save_data(data)
+        with open('storage/.data.json', 'w') as file:
+            json.dump(data, file, indent=4)
+        raise terminate
     if wipe:
         passwords = {}
         credentials = {}
@@ -303,6 +306,7 @@ def wipe():
         with open("storage/.data.json", "w") as file:
             json.dump(data, file, indent=4)
         print("All data wiped!")
+        raise terminate
 
 def read_data():
     with open("storage/.config.json", "r") as file:
@@ -315,6 +319,8 @@ def read_data():
 
 if data["unlocks"] < 1:
     start()
+    data['unlocks'] += 1
+    save_data(data)
 elif not lock:
     clear()
 
@@ -325,9 +331,8 @@ while not lock:
             data["passwords"] += 1
             save_data(data)
         cmd = input(f"{username}$ ")
-        passwords, credentials, data = read_data()
-        # print(data)          
         errors = user_cmd(cmd)
+        passwords, credentials, data = read_data()
     except terminate:
         break
 
