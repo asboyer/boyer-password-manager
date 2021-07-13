@@ -2,11 +2,11 @@
 
 import json, os, getpass
 
-from art import text2art
-
-from boyer import clear
-
-import time
+try:
+    from art import text2art
+    from boyer import clear
+except:
+    os.system('pip install -r requirements.txt')
 
 items = ["username", "password", "URL"]
 lock = False
@@ -116,7 +116,6 @@ commands = """
 "man": to display this message again
 "clear": to clear the terminal window
 "new": to create a new password
-"save": to save your passwords to file
 "wipe": to delete all data stored in the password manager
 "edit": edit a password
 "get": display a password
@@ -137,8 +136,6 @@ def user_cmd(cmd):
         clear()
     elif cmd == 'new':
         new()
-    elif cmd == 'save':
-        save()
     elif cmd == 'get':
         get_pass()
     elif cmd == 'wipe':
@@ -148,7 +145,7 @@ def user_cmd(cmd):
     elif cmd == "":
         list()
     else:
-        print('not a command')
+        print(f'ERROR: \'{cmd}\' is not a command!')
         local_errors = errors + 1
         if local_errors == 3 or local_errors == 5 or local_errors > 10:
             print("use 'man' to display help message")
@@ -191,7 +188,7 @@ def get_pass():
             print("")
         elif password in passwords.keys():
             break
-        elif password == "QUIT":
+        elif password == "back":
             return 0
         else:
             print("Not a password. Press enter to list all of your passwords.")
@@ -207,7 +204,7 @@ def new():
         if name == '':
             print("Please enter a valid password name!") 
         
-        elif name == "QUIT":
+        elif name == "back":
             return 0
 
         elif name in passwords.keys():
@@ -220,7 +217,7 @@ def new():
 
     for item in items:
         user_input = input(f"{item[0].upper() + item[1:]} for {name}: ").strip()
-        if user_input == "QUIT":
+        if user_input == "back":
             return 0
         elif user_input.strip() == "" and item == "URL":
             passwords[name][item] = f'https://{name.lower().strip()}.com'
@@ -239,7 +236,7 @@ def edit():
             for key in passwords.keys():
                 print(f"~ {key}")
                 print("")
-        elif password == 'QUIT':
+        elif password == 'back':
             return 0
         else:
             print(f"You don't have a password named {password.strip()}!")
