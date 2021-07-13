@@ -16,3 +16,5 @@
 - tab for autocompletion
 
 - add option to delete password
+
+- get rid of save command
