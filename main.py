@@ -1,5 +1,3 @@
-#!/opt/homebrew/bin/python3
-
 import json, os, getpass
 
 try:
