@@ -3,3 +3,4 @@ This is where will all your crednetinals and passwords will be stored.
 Storage:
 - passwords: .passwords.json
 - credentials: .config.json
+- user data: .data.json
