@@ -1,5 +1,3 @@
-- record number of times logged in
-- ask for password before wiping
 - update manual
 - encrypt passwords using ceasar cipher
 - change terminal colors
@@ -8,11 +6,8 @@
 
 - read all commands from a database
 
-- track all user data locally
-- track security incidents
-- track command history
-
 - up arrow for previous commands
 - tab for autocompletion
 
 - add option to delete password
+- add the generator to make password option
