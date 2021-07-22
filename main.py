@@ -6,8 +6,6 @@ from art import text2art
 
 from boyer import clear
 
-import time
-
 items = ["username", "password", "URL"]
 lock = False
 wiped = False
